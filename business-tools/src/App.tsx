@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from "react"
 
 function App() {
-  const [seconds, setSeconds] = useState(25 * 60) // 25分
+
+  // Counter
+  const [count, setCount] = useState(0)
+
+  // Timer
+  const [seconds, setSeconds] = useState(25 * 60)
   const [isRunning, setIsRunning] = useState(false)
   const timerId = useRef<number | null>(null)
 
@@ -18,46 +23,26 @@ function App() {
     }
   }, [isRunning])
 
-  useEffect(() => {
-    if (seconds === 0) setIsRunning(false)
-  }, [seconds])
-
   const mm = String(Math.floor(seconds / 60)).padStart(2, "0")
   const ss = String(seconds % 60).padStart(2, "0")
 
-  const start = () => setIsRunning(true)
-  const stop = () => setIsRunning(false)
-  const reset25 = () => {
-    setIsRunning(false)
-    setSeconds(25 * 60)
-  }
-  const reset5 = () => {
-    setIsRunning(false)
-    setSeconds(5 * 60)
-  }
-
   return (
-    <div style={{ padding: 40, fontFamily: "system-ui" }}>
-      <h1>Pomodoro Timer</h1>
+    <div style={{ padding: 40 }}>
 
-      <div style={{ fontSize: 48, margin: "16px 0" }}>
-        {mm}:{ss}
-      </div>
+      <h1>Business Tools</h1>
 
-      <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-        {!isRunning ? (
-          <button onClick={start}>Start</button>
-        ) : (
-          <button onClick={stop}>Stop</button>
-        )}
+      <h2>Counter</h2>
+      <p>{count}</p>
+      <button onClick={() => setCount(count + 1)}>+1</button>
 
-        <button onClick={reset25}>Reset 25:00</button>
-        <button onClick={reset5}>Set 05:00</button>
-      </div>
+      <hr />
 
-      <p style={{ marginTop: 16 }}>
-        Start / Stop とリセットができる簡易ポモドーロタイマーです。
-      </p>
+      <h2>Timer</h2>
+      <div style={{ fontSize: 32 }}>{mm}:{ss}</div>
+
+      <button onClick={() => setIsRunning(true)}>Start</button>
+      <button onClick={() => setIsRunning(false)}>Stop</button>
+
     </div>
   )
 }

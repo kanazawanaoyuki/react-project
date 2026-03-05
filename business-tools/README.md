@@ -5,6 +5,7 @@ React + TypeScript + Vite で作成した、簡易ユーティリティ（ツー
 
 ## できること
 - Counter（カウンター）
+- Timer（タイマー）
 
 ## 使用技術
 - React
