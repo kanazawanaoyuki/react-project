@@ -9,7 +9,13 @@ export function Timer() {
     if (!isRunning) return
 
     timerId.current = window.setInterval(() => {
-      setSeconds((s) => Math.max(0, s - 1))
+      setSeconds((s) => {
+        if (s <= 1) {
+          setIsRunning(false)
+          return 0
+        }
+        return s - 1
+      })
     }, 1000)
 
     return () => {
@@ -18,23 +24,8 @@ export function Timer() {
     }
   }, [isRunning])
 
-  useEffect(() => {
-    if (seconds === 0) setIsRunning(false)
-  }, [seconds])
-
   const mm = String(Math.floor(seconds / 60)).padStart(2, "0")
   const ss = String(seconds % 60).padStart(2, "0")
-
-  const start = () => setIsRunning(true)
-  const stop = () => setIsRunning(false)
-  const reset25 = () => {
-    setIsRunning(false)
-    setSeconds(25 * 60)
-  }
-  const set5 = () => {
-    setIsRunning(false)
-    setSeconds(5 * 60)
-  }
 
   return (
     <section style={{ padding: 16, border: "1px solid #ddd", borderRadius: 8 }}>
@@ -46,12 +37,28 @@ export function Timer() {
 
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
         {!isRunning ? (
-          <button onClick={start}>Start</button>
+          <button onClick={() => setIsRunning(true)}>Start</button>
         ) : (
-          <button onClick={stop}>Stop</button>
+          <button onClick={() => setIsRunning(false)}>Stop</button>
         )}
-        <button onClick={reset25}>Reset 25:00</button>
-        <button onClick={set5}>Set 05:00</button>
+
+        <button
+          onClick={() => {
+            setIsRunning(false)
+            setSeconds(25 * 60)
+          }}
+        >
+          Reset 25:00
+        </button>
+
+        <button
+          onClick={() => {
+            setIsRunning(false)
+            setSeconds(5 * 60)
+          }}
+        >
+          Set 05:00
+        </button>
       </div>
     </section>
   )
